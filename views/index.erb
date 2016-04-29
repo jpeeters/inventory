@@ -1,0 +1,61 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Barcode generator</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen">
+  </head>
+  <body>
+    <div class="container" style="margin-top: 100px;">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center">
+              <h3 class="panel-title">Barcode Generator</h3>
+            </div>
+            <div id="generator-body" class="panel-body">
+              <form class="form form-horizontal" onsubmit="return false;">
+                <div class="input-group">
+                  <input id="barcode-text" class="form-control" type="text" value="" name="_barcode" placeholder="Barcode text" />
+                  <span class="input-group-btn">
+                    <button id="barcode-gen-btn" class="btn btn-default" type="button">Generate!</button>
+                  </span>
+                </div>
+              </form>
+              <div id="barcode-results" style="display: none;" class="text-center">
+                <h3>Result</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/jquery-1.11.0.min.js"></script>
+    <script>
+        $('#barcode-gen-btn').on('click', function () {
+          var barcode  = $('#barcode-text').val();
+
+          if (!barcode)
+            return;
+
+          numbers = barcode.replace(/[^0-9]+/g, '');
+          if (numbers.length != 12)
+            return;
+
+          var image = $('<img class="barcode-image" src="/barcode/image/'+barcode+'" />');
+          var text  = $('<p class="barcode-image">'+barcode+'</p>');
+          var print = $('<form class="form form-horizontal barcode-image" action="/barcode" method="post" target="_blank">'
+              + '<input class="btn btn-default" type="submit" value="Print" />'
+              + '<input type="hidden" name="barcode" value="'+barcode+'" />'
+              + '</form>');
+          var cnt = $('#barcode-results');
+          $('#barcode-results .barcode-image').remove();
+          cnt.append(image);
+          cnt.append(text);
+          cnt.append(print);
+          cnt.show();
+        });
+    </script>
+  </body>
+</html>
